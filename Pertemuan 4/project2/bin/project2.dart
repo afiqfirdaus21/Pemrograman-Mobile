@@ -28,20 +28,32 @@ void main(List<String> arguments) {
 // print(setNilai1.intersection(setNilai2));
 // print(setNilai1.difference(setNilai2));
 
-  var setNilai1 = <int>{};
-  var setNilai2 = <int>{1,2,3};
+  // var setNilai1 = <int>{};
+  // var setNilai2 = <int>{1,2,3};
 
-  stdout.writeln("Jumlah data setNilai2 =");
-  String input = stdin.readLineSync()!;
-  int jumlah = int.parse(input);
-  for (var i = 0; i < jumlah; i++) {
-    stdout.writeln("Masukkan data ke-${i + 1}: ");
+  // stdout.writeln("Jumlah data setNilai2 =");
+  // String input = stdin.readLineSync()!;
+  // int jumlah = int.parse(input);
+  // for (var i = 0; i < jumlah; i++) {
+  //   stdout.writeln("Masukkan data ke-${i + 1}: ");
+  //   String input = stdin.readLineSync()!;
+  //   int nilai = int.parse(input);
+  //   setNilai1.add(nilai);
+  // }
+  // print(setNilai1);
+
+    var setNilai1 = <String>{};
+    // var setNilai2 = <int>{1,2,3};
+
+    stdout.writeln("Jumlah data setNilai1 =");
     String input = stdin.readLineSync()!;
-    int nilai = int.parse(input);
-    setNilai1.add(nilai);
+    int jumlah = int.parse(input ?? '')??0;
+    for (var i = 0; i < jumlah; i++) {
+      stdout.writeln("Masukkan data ke-${i + 1}: ");
+      String input = stdin.readLineSync()!;
+      String nilai = input ?? '';
+      setNilai1.add(nilai);
+    }
+    print(setNilai1);
+    print(setNilai1.elementAt(1));
   }
-  print(setNilai1);
-}
-
-
-
