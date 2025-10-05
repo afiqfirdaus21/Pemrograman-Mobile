@@ -10,33 +10,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Contoh Row',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Contoh Row"),
-        backgroundColor: Colors.teal,
-      ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround, // beri jarak merata
-          children: const [
-            Icon(Icons.home, size: 40, color: Colors.blue),
-            Icon(Icons.star, size: 40, color: Colors.orange),
-            Icon(Icons.settings, size: 40, color: Colors.green),
-          ],
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Column & Row Example")),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Atas"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.star, color: Colors.red, size: 40),
+                  Icon(Icons.star, color: Colors.green, size: 40),
+                  Icon(Icons.star, color: Colors.blue, size: 40),
+                ],
+              ),
+              const Text("Bawah"),
+            ],
+          ),
         ),
       ),
     );
