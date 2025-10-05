@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Contoh Column',
+      title: 'Contoh Row',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
       ),
@@ -26,17 +26,18 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contoh Column"),
+        title: const Text("Contoh Row"),
         backgroundColor: Colors.teal,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,   // posisi vertikal di tengah
-        crossAxisAlignment: CrossAxisAlignment.start, // rata kiri
-        children: const [
-          Text("Baris 1", style: TextStyle(fontSize: 20)),
-          Text("Baris 2", style: TextStyle(fontSize: 20)),
-          Text("Baris 3", style: TextStyle(fontSize: 20)),
-        ],
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround, // beri jarak merata
+          children: const [
+            Icon(Icons.home, size: 40, color: Colors.blue),
+            Icon(Icons.star, size: 40, color: Colors.orange),
+            Icon(Icons.settings, size: 40, color: Colors.green),
+          ],
+        ),
       ),
     );
   }
