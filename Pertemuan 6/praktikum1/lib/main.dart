@@ -26,8 +26,14 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contoh Scaffold"),
-      ),
+  title: const Text("Ini AppBar"),
+  backgroundColor: Colors.blue,
+  leading: const Icon(Icons.menu), // ikon di kiri
+  actions: const [
+    Icon(Icons.search),    // ikon kanan
+    Icon(Icons.more_vert),
+  ],
+),
       body: const Center(
         child: Text("Halo Flutter!"),
       ),
