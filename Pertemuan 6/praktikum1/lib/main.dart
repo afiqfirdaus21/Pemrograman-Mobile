@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Contoh BottomNavigationBar',
+      title: 'Contoh Column',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
       ),
@@ -19,54 +19,24 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
-  static const List<Widget> _pages = <Widget>[
-    Center(child: Text('Halaman Home', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Halaman Business', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Halaman School', style: TextStyle(fontSize: 24))),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Contoh BottomNavigationBar"),
+        title: const Text("Contoh Column"),
         backgroundColor: Colors.teal,
       ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
-          ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,   // posisi vertikal di tengah
+        crossAxisAlignment: CrossAxisAlignment.start, // rata kiri
+        children: const [
+          Text("Baris 1", style: TextStyle(fontSize: 20)),
+          Text("Baris 2", style: TextStyle(fontSize: 20)),
+          Text("Baris 3", style: TextStyle(fontSize: 20)),
         ],
-        currentIndex: _selectedIndex, // item aktif
-        selectedItemColor: Colors.teal,
-        onTap: _onItemTapped,
       ),
     );
   }
