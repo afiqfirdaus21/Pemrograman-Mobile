@@ -10,36 +10,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Contoh Scaffold',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-  title: const Text("Ini AppBar"),
-  backgroundColor: Colors.blue,
-  leading: const Icon(Icons.menu), // ikon di kiri
-  actions: const [
-    Icon(Icons.search),    // ikon kanan
-    Icon(Icons.more_vert),
-  ],
-),
-      body: const Center(
-        child: Text("Halo Flutter!"),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Belajar Scaffold & AppBar"),
+          backgroundColor: Colors.teal,
+          actions: const [
+            Icon(Icons.search),
+            Icon(Icons.settings),
+          ],
+        ),
+        body: const Center(
+          child: Text("Ini Body Aplikasi"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
