@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.teal,
-        textTheme: GoogleFonts.poppinsTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const HomePage(),
@@ -33,10 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [
-    ProfilePage(),
-    CounterPage(),
-  ];
+  final List<Widget> _pages = const [ProfilePage(), CounterPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -54,7 +53,10 @@ class _HomePageState extends State<HomePage> {
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
-          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Counter"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calculate),
+            label: "Counter",
+          ),
         ],
       ),
     );
@@ -74,17 +76,21 @@ class ProfilePage extends StatelessWidget {
             margin: const EdgeInsets.all(16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.teal[50],
+              color: const Color.fromARGB(255, 101, 128, 126),
               borderRadius: BorderRadius.circular(16),
               boxShadow: const [
-                BoxShadow(color: Colors.black26, blurRadius: 5, offset: Offset(2, 4))
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 5,
+                  offset: Offset(2, 4),
+                ),
               ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const FlutterLogo(size: 80),
-                const SizedBox(height: 16),
+                // const FlutterLogo(size: 80),
+                // const SizedBox(height: 16),
                 Container(
                   width: 120,
                   height: 120,
@@ -92,12 +98,20 @@ class ProfilePage extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: Colors.grey[300],
                   ),
-                  child: const Placeholder(), // ganti dengan Image.asset / Image.network
+                  child: ClipOval(
+                    child: Image.asset(
+                      "assets/afiq.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   "Nama: Muhammad Afiq Firdaus",
-                  style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text("NIM: 2341760189"),
                 Text("Jurusan: Teknologi Informasi"),
@@ -173,7 +187,7 @@ class _CounterPageState extends State<CounterPage> {
                 const SizedBox(width: 8),
                 OutlinedButton(onPressed: _reset, child: const Text("Reset")),
               ],
-            )
+            ),
           ],
         ),
       ),
