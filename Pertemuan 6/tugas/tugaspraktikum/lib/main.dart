@@ -10,52 +10,242 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseTheme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF0D9488),
+      ), // teal-ish
+      useMaterial3: true,
+    );
+
     return MaterialApp(
-      title: "My Profile & Counter App",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-        textTheme: GoogleFonts.poppinsTextTheme(
-          Theme.of(context).textTheme,
+      title: 'My Profile & Counter App',
+      theme: baseTheme.copyWith(
+        textTheme: GoogleFonts.poppinsTextTheme(baseTheme.textTheme),
+        appBarTheme: AppBarTheme(
+          centerTitle: true,
+          backgroundColor: baseTheme.colorScheme.primary,
+          foregroundColor: baseTheme.colorScheme.onPrimary,
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: baseTheme.colorScheme.primary,
+          foregroundColor: baseTheme.colorScheme.onPrimary,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: baseTheme.colorScheme.primary,
+            foregroundColor: baseTheme.colorScheme.onPrimary,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: baseTheme.colorScheme.primary),
+            foregroundColor: baseTheme.colorScheme.primary,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          ),
+        ),
       ),
-      home: const HomePage(),
+      home: const HomeShell(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+// Shell utama dengan BottomNavigationBar untuk navigasi antar halaman
+class HomeShell extends StatefulWidget {
+  const HomeShell({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+class _HomeShellState extends State<HomeShell> {
+  int _currentIndex = 0;
 
-  final List<Widget> _pages = const [ProfilePage(), CounterPage()];
+  // Gunakan GlobalKey agar FAB di shell bisa memanggil increment() di CounterPage
+  final GlobalKey<CounterPageState> _counterKey = GlobalKey<CounterPageState>();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  String get _title => _currentIndex == 0 ? 'Profil Mahasiswa' : 'Counter App';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      appBar: AppBar(
+        title: Text(_title),
+        actions: [
+          // Bonus: IconButton
+          if (_currentIndex == 0)
+            IconButton(
+              tooltip: 'Info Aplikasi',
+              icon: const Icon(Icons.info_outline),
+              onPressed: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'My Profile & Counter App',
+                  applicationVersion: '1.0.0',
+                  children: const [Text('Contoh aplikasi Flutter sederhana.')],
+                );
+              },
+            ),
+        ],
+      ),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          const ProfilePage(),
+          CounterPage(key: _counterKey),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.teal,
-        onTap: _onItemTapped,
+        currentIndex: _currentIndex,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profil"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
-            label: "Counter",
+            label: 'Counter',
+          ),
+        ],
+        onTap: (i) => setState(() => _currentIndex = i),
+      ),
+      // FAB hanya tampil di halaman Counter dan menambah angka
+      floatingActionButton: _currentIndex == 1
+          ? FloatingActionButton(
+              onPressed: () => _counterKey.currentState?.increment(),
+              child: const Icon(Icons.add),
+            )
+          : null,
+    );
+  }
+}
+
+// 1) Halaman Profil (StatelessWidget)
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Header: FlutterLogo + Foto Profil
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHighest.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                // Foto Profil (placeholder)
+                CircleAvatar(
+                  radius: 44,
+                  backgroundImage: const AssetImage('assets/afiq.png'),
+                  backgroundColor: Colors.transparent,
+                ),
+
+                const SizedBox(height: 8),
+                Text(
+                  'Muhammad Afiq Firdaus',
+                  style: TextStyle(color: scheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+
+          // Identitas: Nama, NIM, Jurusan
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: scheme.primaryContainer.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nama: Muhammad Afiq Firdaus',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'NIM: 2341760189',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Jurusan: Teknologi informasi',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+
+          // Kontak dengan Row + Icons
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerLow.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.email, color: scheme.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'fafiq8445@gmail.com',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Kirim Email',
+                      icon: const Icon(Icons.send),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Mengirim email...')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.phone, color: scheme.primary),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '+62 895-0469-8493',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Panggil',
+                      icon: const Icon(Icons.call),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Memanggil...')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -63,137 +253,71 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class _ImagePlaceholderBox extends StatelessWidget {
+  const _ImagePlaceholderBox();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Profil Mahasiswa")),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 101, 128, 126),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 5,
-                  offset: Offset(2, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // const FlutterLogo(size: 80),
-                // const SizedBox(height: 16),
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[300],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      "assets/afiq.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "Nama: Muhammad Afiq Firdaus",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text("NIM: 2341760189"),
-                Text("Jurusan: Teknologi Informasi"),
-                Text("Program Studi : Sistem Informasi Bisnis"),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.email, color: Colors.teal),
-                    SizedBox(width: 8),
-                    Text("fafiq8445@gmail.com"),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.phone, color: Colors.teal),
-                    SizedBox(width: 8),
-                    Text("+62 895 0469 8493"),
-                  ],
-                ),
-              ],
-            ),
-          ),
+    final border = BorderRadius.circular(8);
+    return ClipRRect(
+      borderRadius: border,
+      child: Container(
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.7),
+        child: const Center(
+          child: Placeholder(color: Colors.grey, strokeWidth: 1.5),
         ),
       ),
     );
   }
 }
 
+// 2) Halaman Counter (StatefulWidget)
 class CounterPage extends StatefulWidget {
   const CounterPage({super.key});
 
   @override
-  State<CounterPage> createState() => _CounterPageState();
+  State<CounterPage> createState() => CounterPageState();
 }
 
-class _CounterPageState extends State<CounterPage> {
-  int _counter = 0;
+class CounterPageState extends State<CounterPage> {
+  int _count = 0;
 
-  void _increment() {
-    setState(() => _counter++);
-  }
-
-  void _decrement() {
-    setState(() => _counter--);
-  }
-
-  void _reset() {
-    setState(() => _counter = 0);
-  }
+  void increment() => setState(() => _count++);
+  void decrement() => setState(() => _count--);
+  void reset() => setState(() => _count = 0);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Counter App")),
-      body: Center(
+    final textStyle = Theme.of(
+      context,
+    ).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.w700);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '$_counter',
-              style: const TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+              'Nilai Counter',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
+            Text('$_count', style: textStyle),
+            const SizedBox(height: 24),
+            // Tombol disusun dengan Row
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ElevatedButton(onPressed: _increment, child: const Text("+")),
-                const SizedBox(width: 8),
-                ElevatedButton(onPressed: _decrement, child: const Text("-")),
-                const SizedBox(width: 8),
-                OutlinedButton(onPressed: _reset, child: const Text("Reset")),
+                ElevatedButton(onPressed: decrement, child: const Text('-')),
+                const SizedBox(width: 12),
+                ElevatedButton(onPressed: increment, child: const Text('+')),
+                const SizedBox(width: 12),
+                OutlinedButton(onPressed: reset, child: const Text('Reset')),
               ],
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _increment,
-        child: const Icon(Icons.add),
       ),
     );
   }
