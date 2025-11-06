@@ -10,8 +10,6 @@ class GalleryPage extends StatelessWidget {
       'assets/images/gallery2.jpg',
       'assets/images/gallery3.jpg',
       'assets/images/gallery4.jpg',
-      'assets/images/gallery5.jpg',
-      'assets/images/gallery6.jpg',
     ];
 
     return Scaffold(
@@ -24,7 +22,7 @@ class GalleryPage extends StatelessWidget {
         child: GridView.builder(
           itemCount: images.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 kolom
+            crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
