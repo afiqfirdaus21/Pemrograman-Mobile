@@ -34,6 +34,9 @@ dependencies:
   path_provider: ^2.0.0
   path: ^1.8.0
   path_provider_windows: ^2.1.0
+  geolocator: ^14.0.2
+  baseflow_plugin_template: ^2.2.0
+
 
 
 dev_dependencies:
