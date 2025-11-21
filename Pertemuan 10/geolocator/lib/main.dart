@@ -13,7 +13,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   final List<CameraDescription> cameras;
-  const MyApp({Key? key, required this.cameras}) : super(key: key);
+  const MyApp({super.key, required this.cameras});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
 class CameraHome extends StatefulWidget {
   final List<CameraDescription> cameras;
-  const CameraHome({Key? key, required this.cameras}) : super(key: key);
+  const CameraHome({super.key, required this.cameras});
 
   @override
   State<CameraHome> createState() => _CameraHomeState();
@@ -254,8 +254,8 @@ class _CameraHomeState extends State<CameraHome> with WidgetsBindingObserver {
         onPressed: camCtrl != null && camCtrl.value.isInitialized
             ? _takePicture
             : null,
-        child: const Icon(Icons.camera),
         tooltip: 'Ambil Foto',
+        child: const Icon(Icons.camera),
       ),
     );
   }
